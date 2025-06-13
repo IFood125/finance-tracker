@@ -1,1 +1,3 @@
-# finance-tracker
+# Finance Tracker
+
+Finance Tracker is a modern web application that allows users to securely track their income and expenses, visualize financial data with interactive charts, and manage transactions with a clean, responsive interface. The project features user authentication, category-based transaction management, and a demo mode for exploring the app with sample data. Built with Next.js, React, Node.js, and styled using TailwindCSS.
