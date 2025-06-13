@@ -15,14 +15,24 @@ export default function Dashboard() {
         const token = localStorage.getItem('token');
         if (!token) {
             router.push('/auth/login');
-        } else {
-            api.get('/api/transactions/recent', {
-                headers: { Authorization: token }
-            })
-                .then((res) => setTransactions(res.data))
-                .catch((err) => console.error('Failed to fetch recent transactions:', err));
+            return;
         }
-    }, []);
+        // Validate token before retrieving transactions
+        api.post('/api/auth', {}, { headers: { Authorization: token } })
+            .then(() => {
+                // Token is valid, fetch transactions
+                api.get('/api/transactions/recent', {
+                    headers: { Authorization: token }
+                })
+                    .then((res) => setTransactions(res.data))
+                    .catch((err) => console.error('Failed to fetch recent transactions:', err));
+            })
+            .catch(() => {
+                // Token is invalid
+                localStorage.removeItem('token');
+                router.push('/auth/login');
+            });
+    }, [router]);
 
     const incomeTransactions = transactions.filter(t => t.type === 'income');
     const expenseTransactions = transactions.filter(t => t.type === 'expense');
